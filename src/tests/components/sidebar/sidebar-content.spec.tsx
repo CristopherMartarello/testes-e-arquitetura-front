@@ -3,8 +3,9 @@ import { render, screen } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 
 // mockando o useRouter do next para realizarmos o teste
+const pushMock = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: pushMock }),
 }));
 
 // quem estamos testando nesse teste? Sut = System under test
@@ -55,6 +56,19 @@ describe('SidebarContent', () => {
       });
       expect(expandButton).toBeInTheDocument();
       expect(collapseButton).not.toBeInTheDocument();
+    });
+  });
+
+  describe('New prompt', () => {
+    it('should navigate to new prompt page /new', async () => {
+      makeSut();
+      const newPromptButton = screen.getByRole('button', {
+        name: 'Novo prompt',
+      });
+
+      await user.click(newPromptButton);
+
+      expect(pushMock).toHaveBeenCalledWith('/new');
     });
   });
 });
