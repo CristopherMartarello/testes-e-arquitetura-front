@@ -1,4 +1,6 @@
-import SidebarContent from '@/components/sidebar/sidebar-content';
+import SidebarContent, {
+  SidebarPromptProps,
+} from '@/components/sidebar/sidebar-content';
 import { render, screen } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 
@@ -8,19 +10,40 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
+const initialPrompts = [
+  {
+    id: '1',
+    title: 'Title 01',
+    content: 'Content 01',
+  },
+];
+
 // quem estamos testando nesse teste? Sut = System under test
-const makeSut = () => {
-  return render(<SidebarContent />);
+const makeSut = (
+  { prompts = initialPrompts }: SidebarPromptProps = {} as SidebarPromptProps
+) => {
+  return render(<SidebarContent prompts={prompts} />);
 };
 
 describe('SidebarContent', () => {
   const user = userEvent.setup();
 
-  it('should render a new prompt button', () => {
-    makeSut();
+  describe('Base', () => {
+    it('should render a new prompt button', () => {
+      makeSut();
 
-    expect(screen.getByRole('complementary')).toBeVisible();
-    expect(screen.getByRole('button', { name: 'Novo prompt' })).toBeVisible();
+      expect(screen.getByRole('complementary')).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Novo prompt' })).toBeVisible();
+    });
+
+    it('should render prompts list', () => {
+      makeSut();
+
+      expect(screen.getByText(initialPrompts[0].title)).toBeInTheDocument();
+      expect(screen.getAllByRole('paragraph')).toHaveLength(
+        initialPrompts.length
+      );
+    });
   });
 
   describe('Colapsar / Expandir', () => {

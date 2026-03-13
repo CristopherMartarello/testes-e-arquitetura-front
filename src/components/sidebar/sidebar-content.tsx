@@ -11,7 +11,17 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Logo } from '../logo';
 
-const SidebarContent = () => {
+type Prompt = {
+  id: string;
+  title: string;
+  content: string;
+};
+
+export type SidebarPromptProps = {
+  prompts: Prompt[];
+};
+
+const SidebarContent = ({ prompts }: SidebarPromptProps) => {
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -22,7 +32,7 @@ const SidebarContent = () => {
 
   return (
     <aside
-      className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? 'md:w-[72px]' : 'md:w-[384px]'}`}
+      className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? 'md:w-18' : 'md:w-[384px]'}`}
     >
       {isCollapsed && (
         <section className="px-2 py-6">
@@ -78,6 +88,16 @@ const SidebarContent = () => {
           </section>
         </>
       )}
+
+      {prompts.map((prompt) => (
+        <div
+          key={prompt.id}
+          className="p-4 border-b border-gray-600 hover:bg-gray-700 transition-colors"
+        >
+          <h3 className="font-semibold text-gray-100">{prompt.title}</h3>
+          <p className="text-gray-400 text-sm mt-2">{prompt.content}</p>
+        </div>
+      ))}
     </aside>
   );
 };
