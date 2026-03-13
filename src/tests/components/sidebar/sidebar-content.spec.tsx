@@ -44,6 +44,16 @@ describe('SidebarContent', () => {
         initialPrompts.length
       );
     });
+
+    it('should update search field when typing', async () => {
+      makeSut();
+
+      const text = 'AI';
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
+      await user.type(searchInput, text);
+
+      expect(searchInput).toHaveValue(text);
+    });
   });
 
   describe('Colapsar / Expandir', () => {
