@@ -92,6 +92,34 @@ describe('SidebarContent', () => {
       expect(expandButton).toBeInTheDocument();
       expect(collapseButton).not.toBeInTheDocument();
     });
+
+    it('should display new prompt button in sidebar when it is collapsed', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const newPromptButton = screen.getByRole('button', {
+        name: /novo prompt/i,
+      });
+      expect(newPromptButton).toBeVisible();
+    });
+
+    it('should not display prompts list in sidebar when it is collapsed', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const nav = screen.queryByRole('navigation', {
+        name: 'Lista de prompts',
+      });
+      expect(nav).not.toBeInTheDocument();
+    });
   });
 
   describe('New prompt', () => {
@@ -123,16 +151,16 @@ describe('SidebarContent', () => {
       const lastClearCall = pushMock.mock.calls.at(-1);
       expect(lastClearCall?.[0]).toBe('/');
     });
-  });
 
-  it('should render search field with the search param', () => {
-    const text = 'inicial';
-    const searchParams = new URLSearchParams(`q=${text}`);
-    mockSearchParams = searchParams;
+    it('should render search field with the search param', () => {
+      const text = 'inicial';
+      const searchParams = new URLSearchParams(`q=${text}`);
+      mockSearchParams = searchParams;
 
-    makeSut();
+      makeSut();
 
-    const searchInput = screen.getByPlaceholderText('Buscar prompts...');
-    expect(searchInput).toHaveValue(text);
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
+      expect(searchInput).toHaveValue(text);
+    });
   });
 });
