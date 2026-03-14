@@ -11,15 +11,11 @@ import { startTransition, useState } from 'react';
 import { Button } from '../ui/button';
 import { Logo } from '../logo';
 import { Input } from '../ui/input';
-
-type Prompt = {
-  id: string;
-  title: string;
-  content: string;
-};
+import { PromptSummary } from '@/core/domain/prompts/prompt.entity';
+import { PromptList } from '../prompts';
 
 export type SidebarPromptProps = {
-  prompts: Prompt[];
+  prompts: PromptSummary[];
 };
 
 const SidebarContent = ({ prompts }: SidebarPromptProps) => {
@@ -115,15 +111,7 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
         </>
       )}
 
-      {prompts.map((prompt) => (
-        <div
-          key={prompt.id}
-          className="p-4 border-b border-gray-600 hover:bg-gray-700 transition-colors"
-        >
-          <h3 className="font-semibold text-gray-100">{prompt.title}</h3>
-          <p className="text-gray-400 text-sm mt-2">{prompt.content}</p>
-        </div>
-      ))}
+      <PromptList prompts={prompts} />
     </aside>
   );
 };
