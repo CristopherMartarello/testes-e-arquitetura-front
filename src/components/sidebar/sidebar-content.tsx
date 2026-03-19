@@ -38,7 +38,7 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
 
   const hasQuery = query.trim().length > 0;
-  const promptList = hasQuery ? (searchState.prompts ?? prompts) : prompts;
+  const promptList = hasQuery ? (searchState?.prompts ?? prompts) : prompts;
 
   const collapsedSidebar = () => setIsCollapsed(true);
   const expandSidebar = () => setIsCollapsed(false);
