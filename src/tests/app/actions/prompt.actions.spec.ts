@@ -1,6 +1,3 @@
-import { searchPromptAction } from '@/app/actions/prompt.actions';
-import { SearchPromptsUseCase } from '@/core/application/prompts/search-prompts.use-case';
-
 jest.mock('@/lib/prisma', () => ({ prisma: {} }));
 const mockedSearchExecute = jest.fn();
 
@@ -9,6 +6,9 @@ jest.mock('@/core/application/prompts/search-prompts.use-case', () => ({
     .fn()
     .mockImplementation(() => ({ execute: mockedSearchExecute })),
 }));
+
+import { searchPromptAction } from '@/app/actions/prompt.actions';
+import { SearchPromptsUseCase } from '@/core/application/prompts/search-prompts.use-case';
 
 describe('Server Actions: Prompts', () => {
   beforeEach(() => {
