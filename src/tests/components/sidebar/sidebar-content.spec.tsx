@@ -1,8 +1,8 @@
-jest.mock('@/lib/prisma', () => ({ prisma: {} }));
-
-jest.mock('@/app/actions/prompt.actions', () => ({
-  searchPromptAction: jest.fn(),
-}));
+import SidebarContent, {
+  SidebarPromptProps,
+} from '@/components/sidebar/sidebar-content';
+import { render, screen } from '@/lib/test-utils';
+import userEvent from '@testing-library/user-event';
 
 // mockando o useRouter do next para realizarmos o teste
 const pushMock = jest.fn();
@@ -11,12 +11,6 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
   useSearchParams: () => mockSearchParams,
 }));
-
-import SidebarContent, {
-  SidebarPromptProps,
-} from '@/components/sidebar/sidebar-content';
-import { render, screen } from '@/lib/test-utils';
-import userEvent from '@testing-library/user-event';
 
 const initialPrompts = [
   {
