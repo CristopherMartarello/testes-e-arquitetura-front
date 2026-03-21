@@ -77,6 +77,26 @@ describe('SidebarContent', () => {
       expect(expandButton).not.toBeInTheDocument();
     });
 
+    it('should expand when clicking in expand button', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i, //i -> insensitivo, sem case sensitive
+      });
+      await user.click(collapseButton);
+
+      const expandButton = screen.getByRole('button', {
+        name: /expandir sidebar/i,
+      });
+      await user.click(expandButton);
+
+      expect(
+        screen.getByRole('button', { name: /minimizar sidebar/i })
+      ).toBeVisible();
+      expect(
+        screen.getByRole('navigation', { name: 'Lista de prompts' })
+      ).toBeVisible();
+    });
+
     it('should collapse and show expand button', async () => {
       makeSut();
 
@@ -161,6 +181,33 @@ describe('SidebarContent', () => {
 
       const searchInput = screen.getByPlaceholderText('Buscar prompts...');
       expect(searchInput).toHaveValue(text);
+    });
+
+    it('should submit form when typing in search field', async () => {
+      const submitSpy = jest
+        .spyOn(HTMLFormElement.prototype, 'requestSubmit')
+        .mockImplementation(() => undefined);
+      makeSut();
+
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
+
+      await user.type(searchInput, 'AI');
+
+      expect(submitSpy).toHaveBeenCalled();
+      submitSpy.mockRestore();
+    });
+
+    it('should auto submit when mouting and have initial query', () => {
+      const submitSpy = jest
+        .spyOn(HTMLFormElement.prototype, 'requestSubmit')
+        .mockImplementation(() => undefined);
+      const text = 'text';
+      const searchParams = new URLSearchParams(`q=${text}`);
+      mockSearchParams = searchParams;
+      makeSut();
+
+      expect(submitSpy).toHaveBeenCalled();
+      submitSpy.mockRestore();
     });
   });
 });
