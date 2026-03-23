@@ -9,7 +9,7 @@ import { SearchPromptsUseCase } from '@/core/application/prompts/search-prompts.
 import { PromptSummary } from '@/core/domain/prompts/prompt.entity';
 import { PrismaPromptRepository } from '@/infra/repository/prisma-prompt.repository';
 import { prisma } from '@/lib/prisma';
-import z, { success } from 'zod';
+import z from 'zod';
 
 type SearchFormState = {
   success: boolean;
