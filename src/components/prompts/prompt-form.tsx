@@ -10,8 +10,12 @@ import { Textarea } from '../ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
+import { createPromptAction } from '@/app/actions/prompt.actions';
+import { useRouter } from 'next/navigation';
 
 const PromptForm = () => {
+  const router = useRouter();
+
   const form = useForm<createPromptDTO>({
     resolver: zodResolver(createPromptSchema),
     defaultValues: {
@@ -20,8 +24,17 @@ const PromptForm = () => {
     },
   });
 
+  const submit = async (data: createPromptDTO) => {
+    const result = await createPromptAction(data);
+    if (!result.success) {
+      return;
+    }
+
+    router.refresh();
+  };
+
   return (
-    <form action="" className="space-y-6">
+    <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
       <header className="flex flex-wrap gap-2 items-center mb-6 justify-end">
         <Button type="submit" size="sm">
           Salvar
