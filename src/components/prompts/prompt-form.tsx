@@ -12,6 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { createPromptAction } from '@/app/actions/prompt.actions';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const PromptForm = () => {
   const router = useRouter();
@@ -27,10 +28,11 @@ const PromptForm = () => {
   const submit = async (data: createPromptDTO) => {
     const result = await createPromptAction(data);
     if (!result.success) {
+      toast.error(result.message);
       return;
     }
 
-    router.refresh();
+    toast.success(result.message);
   };
 
   return (
