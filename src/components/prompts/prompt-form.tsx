@@ -33,6 +33,7 @@ const PromptForm = () => {
     }
 
     toast.success(result.message);
+    router.refresh();
   };
 
   return (
