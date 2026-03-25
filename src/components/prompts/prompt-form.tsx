@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { createPromptAction } from '@/app/actions/prompt.actions';
 import { useRouter } from 'next/navigation';
@@ -26,7 +26,10 @@ const PromptForm = () => {
     },
   });
 
-  const content = form.watch('content');
+  const content = useWatch({
+    control: form.control,
+    name: 'content',
+  });
 
   const submit = async (data: createPromptDTO) => {
     const result = await createPromptAction(data);
