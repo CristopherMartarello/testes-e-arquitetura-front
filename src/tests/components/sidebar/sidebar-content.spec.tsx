@@ -1,7 +1,7 @@
 import SidebarContent, {
   SidebarPromptProps,
 } from '@/components/sidebar/sidebar-content';
-import { render, screen } from '@/lib/test-utils';
+import { render, screen, waitFor } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 
 // mockando o useRouter do next para realizarmos o teste
@@ -172,7 +172,7 @@ describe('SidebarContent', () => {
       expect(lastClearCall?.[0]).toBe('/');
     });
 
-    it('should render search field with the search param', () => {
+    it('should render search field with the search param', async () => {
       const text = 'inicial';
       const searchParams = new URLSearchParams(`q=${text}`);
       mockSearchParams = searchParams;
@@ -180,7 +180,7 @@ describe('SidebarContent', () => {
       makeSut();
 
       const searchInput = screen.getByPlaceholderText('Buscar prompts...');
-      expect(searchInput).toHaveValue(text);
+      await waitFor(() => expect(searchInput).toHaveValue(text));
     });
 
     it('should submit form when typing in search field', async () => {
