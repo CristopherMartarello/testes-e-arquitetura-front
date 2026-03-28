@@ -12,14 +12,14 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import {
   createPromptAction,
-  updatedPromptAction,
+  updatePromptAction,
 } from '@/app/actions/prompt.actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import CopyButton from '../button-actions/copy-button';
 import { Prompt } from '@/core/domain/prompts/prompt.entity';
 
-type PromptFormProps = {
+export type PromptFormProps = {
   prompt?: Prompt | null;
 };
 
@@ -43,7 +43,7 @@ const PromptForm = ({ prompt }: PromptFormProps) => {
 
   const submit = async (data: createPromptDTO) => {
     const result = isEdit
-      ? await updatedPromptAction({ id: prompt.id, ...data })
+      ? await updatePromptAction({ id: prompt.id, ...data })
       : await createPromptAction(data);
 
     if (!result.success) {

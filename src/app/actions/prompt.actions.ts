@@ -67,7 +67,7 @@ export async function createPromptAction(
   };
 }
 
-export async function updatedPromptAction(
+export async function updatePromptAction(
   data: updatePromptDTO
 ): Promise<FormState> {
   const validated = updatePromptDTOSchema.safeParse(data);
