@@ -10,19 +10,27 @@ import { Textarea } from '../ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
-import { createPromptAction } from '@/app/actions/prompt.actions';
+import {
+  createPromptAction,
+  updatedPromptAction,
+} from '@/app/actions/prompt.actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import CopyButton from '../button-actions/copy-button';
+import { Prompt } from '@/core/domain/prompts/prompt.entity';
 
-const PromptForm = () => {
+type PromptFormProps = {
+  prompt?: Prompt | null;
+};
+
+const PromptForm = ({ prompt }: PromptFormProps) => {
   const router = useRouter();
 
   const form = useForm<createPromptDTO>({
     resolver: zodResolver(createPromptSchema),
     defaultValues: {
-      title: '',
-      content: '',
+      title: prompt?.title || '',
+      content: prompt?.content || '',
     },
   });
 
@@ -31,8 +39,13 @@ const PromptForm = () => {
     name: 'content',
   });
 
+  const isEdit = !!prompt?.id;
+
   const submit = async (data: createPromptDTO) => {
-    const result = await createPromptAction(data);
+    const result = isEdit
+      ? await updatedPromptAction({ id: prompt.id, ...data })
+      : await createPromptAction(data);
+
     if (!result.success) {
       toast.error(result.message);
       return;
