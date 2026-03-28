@@ -18,6 +18,7 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
+  globalSetup: './e2e/global-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -79,16 +80,17 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: process.env.CI ? 'npm run start' : 'npm run dev',
-  //   url: BASE_URL,
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 180 * 1000,
-  //   env: {
-  //     PORT,
-  //     ...(process.env.DATABASE_URL
-  //       ? { DATABASE_URL: process.env.DATABASE_URL }
-  //       : {}),
-  //   },
-  // },
+  webServer: {
+    command: process.env.CI ? 'npm run start' : 'npm run dev',
+    url: BASE_URL,
+    reuseExistingServer: !process.env.CI,
+    // Aumentando o timeout para aguardar o servidor iniciar, especialmente útil em ambientes CI onde a inicialização pode ser mais lenta.
+    timeout: 180 * 1000,
+    env: {
+      PORT,
+      ...(process.env.DATABASE_URL
+        ? { DATABASE_URL: process.env.DATABASE_URL }
+        : {}),
+    },
+  },
 });

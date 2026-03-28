@@ -20,7 +20,7 @@ const Sidebar = async () => {
 
   return (
     <Suspense fallback={<Spinner />}>
-      <SidebarContent prompts={initialPrompts} />;
+      <SidebarContent prompts={initialPrompts} />
     </Suspense>
   );
 };
