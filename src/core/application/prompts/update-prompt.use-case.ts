@@ -1,8 +1,8 @@
-import { PrismaPromptRepository } from '@/infra/repository/prisma-prompt.repository';
 import { updatePromptDTO } from './update-prompt.dto';
+import { PromptRepository } from '@/core/domain/prompts/prompt.repository';
 
 export class UpdatePromptUseCase {
-  constructor(private promptRepository: PrismaPromptRepository) {}
+  constructor(private promptRepository: PromptRepository) {}
 
   async execute(data: updatePromptDTO) {
     const exists = await this.promptRepository.findById(data.id);
