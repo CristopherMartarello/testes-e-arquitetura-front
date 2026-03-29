@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../ui/alert-dialog';
+import { toast } from 'sonner';
 
 export type PromptCardProps = {
   prompt: PromptSummary;
@@ -23,7 +24,9 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    setIsDeleting(true);
+    // setIsDeleting(true);
+
+    toast.success('Prompt removido com sucesso!');
   };
 
   return (
@@ -44,7 +47,6 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
               size="icon"
               title="Remover Prompt"
               aria-label="Remover Prompt"
-              onClick={() => setIsDeleting(true)}
             >
               <DeleteIcon className="size-3" />
             </Button>
@@ -64,6 +66,7 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
                 {isDeleting && (
                   <LoadingIcon className="mr-2 h-4 w-4 animate-spin" />
                 )}
+                Confirmar remoção
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

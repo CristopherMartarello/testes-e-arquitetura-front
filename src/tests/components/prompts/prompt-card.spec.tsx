@@ -4,6 +4,11 @@ import {
 } from '@/components/prompts/prompt-card';
 import { render, screen } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'sonner';
+
+jest.mock('sonner', () => ({
+  toast: { success: jest.fn(), error: jest.fn() },
+}));
 
 const makeSut = ({ prompt }: PromptCardProps) => {
   return render(<PromptCard prompt={prompt} />);
@@ -34,5 +39,15 @@ describe('PromptCard', () => {
     expect(
       screen.getByRole('alertdialog', { name: /remover prompt/i })
     ).toBeInTheDocument();
+  });
+
+  it('should remove with success and show toast', async () => {
+    makeSut({ prompt });
+
+    const deleteButton = screen.getByRole('button', { name: 'Remover Prompt' });
+    await user.click(deleteButton);
+    await user.click(screen.getByRole('button', { name: 'Confirmar remoção' }));
+
+    expect(toast.success).toHaveBeenCalledWith('Prompt removido com sucesso!');
   });
 });
