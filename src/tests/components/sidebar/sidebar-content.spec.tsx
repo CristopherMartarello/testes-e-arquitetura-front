@@ -58,6 +58,26 @@ describe('SidebarContent', () => {
     });
   });
 
+  describe('SidebarContent - Mobile', () => {
+    it('should open/close mobile menu correctly', async () => {
+      makeSut();
+
+      // Default
+      const aside = screen.getByRole('complementary');
+      expect(aside.className).toContain('-translate-x-full');
+
+      // Open Button
+      const openButton = screen.getByRole('button', { name: 'Abrir menu' });
+      await user.click(openButton);
+      expect(aside.className).toContain('translate-x-0');
+
+      // Close Button
+      const closeButton = screen.getByRole('button', { name: 'Fechar menu' });
+      await user.click(closeButton);
+      expect(aside.className).toContain('-translate-x-full');
+    });
+  });
+
   describe('Colapsar / Expandir', () => {
     it('should start expanded and display minimize button', () => {
       makeSut();
