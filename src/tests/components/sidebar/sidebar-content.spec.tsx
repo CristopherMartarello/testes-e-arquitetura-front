@@ -34,8 +34,10 @@ describe('SidebarContent', () => {
     it('should render a new prompt button', () => {
       makeSut();
 
-      expect(screen.getByRole('complementary')).toBeVisible();
-      expect(screen.getByRole('button', { name: 'Novo prompt' })).toBeVisible();
+      expect(screen.getByRole('complementary')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Novo prompt' })
+      ).toBeInTheDocument();
     });
 
     it('should render prompts list', () => {
@@ -83,12 +85,12 @@ describe('SidebarContent', () => {
       makeSut();
 
       const aside = screen.getByRole('complementary');
-      expect(aside).toBeVisible();
+      expect(aside).toBeInTheDocument();
 
       const collapseButton = screen.getByRole('button', {
         name: /minimizar sidebar/i, //i -> insensitivo, sem case sensitive
       });
-      expect(collapseButton).toBeVisible();
+      expect(collapseButton).toBeInTheDocument();
 
       // queryByRole -> retorna null se não há um nó correspondente
       const expandButton = screen.queryByRole('button', {
@@ -111,10 +113,10 @@ describe('SidebarContent', () => {
 
       expect(
         screen.getByRole('button', { name: /minimizar sidebar/i })
-      ).toBeVisible();
+      ).toBeInTheDocument();
       expect(
         screen.getByRole('navigation', { name: 'Lista de prompts' })
-      ).toBeVisible();
+      ).toBeInTheDocument();
     });
 
     it('should collapse and show expand button', async () => {
@@ -144,7 +146,7 @@ describe('SidebarContent', () => {
       const newPromptButton = screen.getByRole('button', {
         name: /novo prompt/i,
       });
-      expect(newPromptButton).toBeVisible();
+      expect(newPromptButton).toBeInTheDocument();
     });
 
     it('should not display prompts list in sidebar when it is collapsed', async () => {

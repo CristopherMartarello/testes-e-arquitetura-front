@@ -16,12 +16,15 @@ import {
 } from '../ui/alert-dialog';
 import { toast } from 'sonner';
 import { deletePromptAction } from '@/app/actions/prompt.actions';
+import { motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 
 export type PromptCardProps = {
   prompt: PromptSummary;
 };
 
 export const PromptCard = ({ prompt }: PromptCardProps) => {
+  const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -31,9 +34,11 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
       const result = await deletePromptAction(prompt.id);
       if (!result.success) {
         toast.error(result.message);
+        return;
       }
 
       toast.success(result.message);
+      router.refresh();
     } catch (error) {
       const _error = error as Error;
       toast.error(_error.message);
@@ -43,7 +48,17 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
   };
 
   return (
-    <li className="p-3 rounded-lg transition-all duration-200 group relative hover:bg-gray-700">
+    <motion.li
+      aria-label={prompt.title}
+      initial={{ opacity: 1, height: 'auto' }}
+      exit={{
+        opacity: 0,
+        height: 0,
+        marginBottom: 0,
+        transition: { duration: 0.3, ease: 'easeInOut' },
+      }}
+      className="p-3 rounded-lg transition-all duration-200 group relative hover:bg-gray-700"
+    >
       <header className="flex items-start justify-between">
         <Link href={`/${prompt.id}`} prefetch className="flex-1 min-w-0">
           <h3 className="font-medium text-sm text-white group-hover:text-accent-300 transition-colors">
@@ -85,6 +100,6 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
           </AlertDialogContent>
         </AlertDialog>
       </header>
-    </li>
+    </motion.li>
   );
 };

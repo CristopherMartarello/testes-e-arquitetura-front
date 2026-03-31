@@ -22,6 +22,7 @@ import { PromptSummary } from '@/core/domain/prompts/prompt.entity';
 import { PromptList } from '../prompts';
 import { searchPromptAction } from '@/app/actions/prompt.actions';
 import { Spinner } from '../ui/spinner';
+import { motion } from 'motion/react';
 
 export type SidebarPromptProps = {
   prompts: PromptSummary[];
@@ -47,6 +48,8 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
 
   const hasQuery = query.trim().length > 0;
   const promptList = hasQuery ? (searchState.prompts ?? prompts) : prompts;
+
+  const fadeTransition = { duration: 0.2, delay: 0.1 };
 
   const collapsedSidebar = () => setIsCollapsed(true);
   const expandSidebar = () => setIsCollapsed(false);
@@ -84,7 +87,9 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
       >
         <Menu className="size-5 text-gray-100" />
       </Button>
-      <aside
+      <motion.aside
+        initial={false}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? 'md:w-18' : 'md:w-[384px]'} ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         {isCollapsed && (
@@ -93,7 +98,7 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
               <Button
                 onClick={expandSidebar}
                 variant="icon"
-                className="hidden md:inline-flex p-2 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-500 rounded-lg transition-colors"
+                className="md:inline-flex p-2 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-500 rounded-lg transition-colors"
                 aria-label="Expandir sidebar"
                 title="Expandir sidebar"
               >
@@ -101,7 +106,12 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
               </Button>
             </header>
 
-            <div className="flex flex-col items-center space-y-4">
+            <motion.div
+              initial={false}
+              animate={{ opacity: 1 }}
+              transition={fadeTransition}
+              className="flex flex-col items-center space-y-4"
+            >
               <Button
                 onClick={handleNewPrompt}
                 aria-label="Novo prompt"
@@ -109,7 +119,7 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
               >
                 <AddIcon className="w-5 h-5 text-white" />
               </Button>
-            </div>
+            </motion.div>
           </section>
         )}
 
@@ -128,20 +138,25 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
                   </Button>
                 </div>
               </div>
-              <div className="flex w-full items-center justify-between mb-6">
+              <motion.div
+                initial={false}
+                animate={{ opacity: 1 }}
+                transition={fadeTransition}
+                className="flex w-full items-center justify-between mb-6"
+              >
                 <header className="flex w-full items-center justify-between">
                   <Logo />
                   <Button
                     onClick={collapsedSidebar}
                     variant="icon"
-                    className="hidden md:inline-flex p-2 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-500 rounded-lg transition-colors"
+                    className="md:inline-flex p-2 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-500 rounded-lg transition-colors"
                     title="Minimizar sidebar"
                     aria-label="Minimizar sidebar"
                   >
                     <ArrowLeftToLine className="w-5 h-5 text-gray-100" />
                   </Button>
                 </header>
-              </div>
+              </motion.div>
 
               <section className="mb-5">
                 <form
@@ -169,23 +184,32 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
                 </form>
               </section>
 
-              <div>
+              <motion.div
+                initial={false}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={fadeTransition}
+              >
                 <Button onClick={handleNewPrompt} className="w-full" size="lg">
                   <AddIcon className="w-5 h-5 mr-2" />
                   Novo prompt
                 </Button>
-              </div>
+              </motion.div>
             </section>
 
-            <nav
+            <motion.nav
+              initial={false}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={fadeTransition}
               className="flex-1 overflow-auto px-6 pb-6"
               aria-label="Lista de prompts"
             >
               <PromptList prompts={promptList} />
-            </nav>
+            </motion.nav>
           </>
         )}
-      </aside>
+      </motion.aside>
     </>
   );
 };
