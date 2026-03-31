@@ -7,7 +7,7 @@ import {
   X as CloseButton,
   Menu,
 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   startTransition,
   useActionState,
@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useQueryState } from 'nuqs';
 import { Button } from '../ui/button';
 import { Logo } from '../logo';
 import { Input } from '../ui/input';
@@ -30,7 +31,6 @@ export type SidebarPromptProps = {
 
 const SidebarContent = ({ prompts }: SidebarPromptProps) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -44,7 +44,7 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [query, setQuery] = useState(searchParams.get('q') ?? '');
+  const [query, setQuery] = useQueryState('q', { defaultValue: '' });
 
   const hasQuery = query.trim().length > 0;
   const promptList = hasQuery ? (searchState.prompts ?? prompts) : prompts;
@@ -64,8 +64,6 @@ const SidebarContent = ({ prompts }: SidebarPromptProps) => {
     setQuery(newQuery);
 
     startTransition(() => {
-      const url = newQuery ? `/?q=${encodeURIComponent(newQuery)}` : '/';
-      router.push(url, { scroll: false });
       formRef.current?.requestSubmit();
     });
   };
