@@ -1,7 +1,8 @@
 name: CI (Integração Contínua) # Nome da CI
 on: [pull_request] # Quando a CI é disparada (neste caso, em pull requests)
 
-jobs: # Definição dos jobs a serem executados
+# Definição dos jobs a serem executados
+jobs:
   build: # Nome do job
     name: Validar Código e Gerar Build
     runs-on: ubuntu-latest # Ambiente de execução (Ubuntu mais recente), servidor temporário
