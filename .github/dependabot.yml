@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm' # Ecossistema a ser monitorado (npm para projetos Node.js)
+    directory: '/'
+    schedule:
+      interval: 'daily' # Frequência de verificação de atualizações (diária)
+      time: '05:00' # Horário para verificação de atualizações (UTC), 5AM
+    open-pull-requests-limit: 10 # Limite de pull requests abertos para atualizações
