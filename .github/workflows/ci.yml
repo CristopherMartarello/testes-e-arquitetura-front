@@ -1,0 +1,57 @@
+name: CI (Integração Contínua) # Nome da CI
+on: [pull_request] # Quando a CI é disparada (neste caso, em pull requests)
+
+jobs: # Definição dos jobs a serem executados
+  build: # Nome do job
+    name: Validar Código e Gerar Build
+    runs-on: ubuntu-latest # Ambiente de execução (Ubuntu mais recente), servidor temporário
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres?schema=public
+
+    steps: # Passos a serem executados no job
+      - name: Checkout do Repositório # Baixar o código dentro da VM
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js # Configurar o ambiente Node.js para a versão 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Instalar pnpm # Configurar o ambiente para usar o pnpm como gerenciador de pacotes
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Instalar Dependências # Instalar as dependências do projeto usando o pnpm, garantindo que o lockfile seja respeitado para consistência
+        run: pnpm install --frozen-lockfile
+
+      - name: Gerar Cliente do Prisma # Gerar o cliente do Prisma para garantir que as alterações no esquema sejam refletidas no código, permitindo a interação com o banco de dados
+        run: pnpm db:generate
+
+      - name: Verificar Estilo (Lint) # Verificar o estilo do código usando o lint para garantir que o código siga as convenções e padrões definidos, ajudando a manter a qualidade e legibilidade do código
+        run: pnpm lint
+
+      - name: Checagem de Tipagem (Typecheck) # Verificar a tipagem do código usando o TypeScript para garantir que o código seja seguro em relação a tipos, ajudando a prevenir erros comuns relacionados a tipos e melhorando a robustez do código
+        run: pnpm typecheck
+
+      - name: Rodar Testes de Unidade # Rodar os testes de unidade para garantir que as funcionalidades do código estejam funcionando corretamente, ajudando a identificar e corrigir bugs antes que o código seja mesclado
+        run: pnpm test:coverage
+
+      - name: Gerar Build Final # Gerar a build final do projeto
+        run: pnpm build
