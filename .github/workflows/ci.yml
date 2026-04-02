@@ -34,25 +34,20 @@ jobs:
         with:
           node-version: 22.x
 
-      - name: Instalar pnpm # Configurar o ambiente para usar o pnpm como gerenciador de pacotes
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
       - name: Instalar Dependências # Instalar as dependências do projeto usando o pnpm, garantindo que o lockfile seja respeitado para consistência
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Gerar Cliente do Prisma # Gerar o cliente do Prisma para garantir que as alterações no esquema sejam refletidas no código, permitindo a interação com o banco de dados
-        run: pnpm db:generate
+        run: npm run db:generate
 
       - name: Verificar Estilo (Lint) # Verificar o estilo do código usando o lint para garantir que o código siga as convenções e padrões definidos, ajudando a manter a qualidade e legibilidade do código
-        run: pnpm lint
+        run: npm run lint
 
       - name: Checagem de Tipagem (Typecheck) # Verificar a tipagem do código usando o TypeScript para garantir que o código seja seguro em relação a tipos, ajudando a prevenir erros comuns relacionados a tipos e melhorando a robustez do código
-        run: pnpm typecheck
+        run: npm run typecheck
 
       - name: Rodar Testes de Unidade # Rodar os testes de unidade para garantir que as funcionalidades do código estejam funcionando corretamente, ajudando a identificar e corrigir bugs antes que o código seja mesclado
-        run: pnpm test:coverage
+        run: npm run test:coverage
 
       - name: Gerar Build Final # Gerar a build final do projeto
-        run: pnpm build
+        run: npm run build
